@@ -5,8 +5,6 @@ import numpy as np
 if __name__ == '__main__':
 
     img_path = "new_data/c2.jpg"
-    
-    # Video Playlist: https://www.youtube.com/playlist?list=PLHae9ggVvqPgyRQQOtENr6hK0m1UquGaG
 
     img = cv2.imread(img_path, 0) # load an image
 
@@ -28,6 +26,7 @@ if __name__ == '__main__':
     #Can be used for edge detection because low frequencies at center are blocked
     #and only high frequencies are allowed. Edges are high frequency components.
     #Amplifies noise.
+    # FIGURA 6:
     # rows, cols = img.shape
     # crow, ccol = int(rows / 2), int(cols / 2)
     # mask = np.ones((rows, cols, 2), np.uint8)
@@ -40,6 +39,7 @@ if __name__ == '__main__':
     # Circular LPF mask, center circle is 1, remaining all zeros
     # Only allows low frequency components - smooth regions
     # Can smooth out noise but blurs edges.
+    # FIGURA 7:
     rows, cols = img.shape
     crow, ccol = int(rows / 2), int(cols / 2)
     mask = np.zeros((rows, cols, 2), np.uint8)
