@@ -24,36 +24,31 @@ if __name__ == '__main__':
     # So we can add 1 to the array to avoid seeing a warning. 
     magnitude_spectrum = 20 * np.log(cv2.magnitude(dft_shift[:, :, 0], dft_shift[:, :, 1]))
 
-
     # Circular HPF mask, center circle is 0, remaining all ones
     #Can be used for edge detection because low frequencies at center are blocked
     #and only high frequencies are allowed. Edges are high frequency components.
     #Amplifies noise.
-
-    rows, cols = img.shape
-    crow, ccol = int(rows / 2), int(cols / 2)
-
-    mask = np.ones((rows, cols, 2), np.uint8)
-    r = 80
-    center = [crow, ccol]
-    x, y = np.ogrid[:rows, :cols]
-    mask_area = (x - center[0]) ** 2 + (y - center[1]) ** 2 <= r*r
-    mask[mask_area] = 0
-
+    # rows, cols = img.shape
+    # crow, ccol = int(rows / 2), int(cols / 2)
+    # mask = np.ones((rows, cols, 2), np.uint8)
+    # r = 20
+    # center = [crow, ccol]
+    # x, y = np.ogrid[:rows, :cols]
+    # mask_area = (x - center[0]) ** 2 + (y - center[1]) ** 2 <= r*r
+    # mask[mask_area] = 0
 
     # Circular LPF mask, center circle is 1, remaining all zeros
     # Only allows low frequency components - smooth regions
-    #Can smooth out noise but blurs edges.
-    #
-    """
-    rows, cols = img.shape
-    crow, ccol = int(rows / 2), int(cols / 2)
-    mask = np.zeros((rows, cols, 2), np.uint8)
-    r = 100
-    center = [crow, ccol]
-    x, y = np.ogrid[:rows, :cols]
-    mask_area = (x - center[0]) ** 2 + (y - center[1]) ** 2 <= r*r
-    mask[mask_area] = 1
+    # Can smooth out noise but blurs edges.
+    # rows, cols = img.shape
+    # crow, ccol = int(rows / 2), int(cols / 2)
+    # mask = np.zeros((rows, cols, 2), np.uint8)
+    # r = 20
+    # center = [crow, ccol]
+    # x, y = np.ogrid[:rows, :cols]
+    # mask_area = (x - center[0]) ** 2 + (y - center[1]) ** 2 <= r*r
+    # mask[mask_area] = 1
+
     # Band Pass Filter - Concentric circle mask, only the points living in concentric circle are ones
     rows, cols = img.shape
     crow, ccol = int(rows / 2), int(cols / 2)
@@ -65,8 +60,6 @@ if __name__ == '__main__':
     mask_area = np.logical_and(((x - center[0]) ** 2 + (y - center[1]) ** 2 >= r_in ** 2),
                             ((x - center[0]) ** 2 + (y - center[1]) ** 2 <= r_out ** 2))
     mask[mask_area] = 1
-    """
-
 
     # apply mask and inverse DFT: Multiply fourier transformed image (values)
     #with the mask values. 
@@ -84,8 +77,6 @@ if __name__ == '__main__':
 
     #Magnitude spectrum of the image domain
     img_back = cv2.magnitude(img_back[:, :, 0], img_back[:, :, 1])
-
-
 
     fig = plt.figure(figsize=(12, 12))
     ax1 = fig.add_subplot(2,2,1)
