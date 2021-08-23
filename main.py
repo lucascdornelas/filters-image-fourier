@@ -4,7 +4,7 @@ import numpy as np
 
 if __name__ == '__main__':
 
-    img_path = "new_data/monument.jpeg"
+    img_path = "new_data/c2.jpg"
     
     # Video Playlist: https://www.youtube.com/playlist?list=PLHae9ggVvqPgyRQQOtENr6hK0m1UquGaG
 
@@ -40,26 +40,26 @@ if __name__ == '__main__':
     # Circular LPF mask, center circle is 1, remaining all zeros
     # Only allows low frequency components - smooth regions
     # Can smooth out noise but blurs edges.
-    # rows, cols = img.shape
-    # crow, ccol = int(rows / 2), int(cols / 2)
-    # mask = np.zeros((rows, cols, 2), np.uint8)
-    # r = 20
-    # center = [crow, ccol]
-    # x, y = np.ogrid[:rows, :cols]
-    # mask_area = (x - center[0]) ** 2 + (y - center[1]) ** 2 <= r*r
-    # mask[mask_area] = 1
-
-    # Band Pass Filter - Concentric circle mask, only the points living in concentric circle are ones
     rows, cols = img.shape
     crow, ccol = int(rows / 2), int(cols / 2)
     mask = np.zeros((rows, cols, 2), np.uint8)
-    r_out = 80
-    r_in = 10
+    r = 20
     center = [crow, ccol]
     x, y = np.ogrid[:rows, :cols]
-    mask_area = np.logical_and(((x - center[0]) ** 2 + (y - center[1]) ** 2 >= r_in ** 2),
-                            ((x - center[0]) ** 2 + (y - center[1]) ** 2 <= r_out ** 2))
+    mask_area = (x - center[0]) ** 2 + (y - center[1]) ** 2 <= r*r
     mask[mask_area] = 1
+
+    # Band Pass Filter - Concentric circle mask, only the points living in concentric circle are ones
+    # rows, cols = img.shape
+    # crow, ccol = int(rows / 2), int(cols / 2)
+    # mask = np.zeros((rows, cols, 2), np.uint8)
+    # r_out = 80
+    # r_in = 10
+    # center = [crow, ccol]
+    # x, y = np.ogrid[:rows, :cols]
+    # mask_area = np.logical_and(((x - center[0]) ** 2 + (y - center[1]) ** 2 >= r_in ** 2),
+    #                         ((x - center[0]) ** 2 + (y - center[1]) ** 2 <= r_out ** 2))
+    # mask[mask_area] = 1
 
     # apply mask and inverse DFT: Multiply fourier transformed image (values)
     #with the mask values. 
