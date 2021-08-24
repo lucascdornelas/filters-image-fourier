@@ -5,27 +5,27 @@ import numpy as np
 if __name__ == '__main__':
 
     img_path = "new_data/c2.jpg"
-
     img = cv2.imread(img_path, 0) # load an image
 
-    # Output is a 2D complex array. 1st channel real and 2nd imaginary
-    # For fft in opencv input image needs to be converted to float32
+    # A saída é uma matriz complexa 2D. 1º canal real e 2º imaginário
+    # Para fft in opencv, a imagem de entrada precisa ser convertida para float32
     dft = cv2.dft(np.float32(img), flags=cv2.DFT_COMPLEX_OUTPUT)
 
-    # Rearranges a Fourier transform X by shifting the zero-frequency 
-    # component to the center of the array.
-    # Otherwise it starts at the tope left corenr of the image (array)
+    # Reorganiza uma transformada de Fourier X mudando a frequência zero
+    # componente ao centro da matriz.
+    # Caso contrário, começa no topo esquerdo do corenr da imagem (array)
     dft_shift = np.fft.fftshift(dft)
 
-    # Magnitude of the function is 20.log(abs(f))
-    # For values that are 0 we may end up with indeterminate values for log. 
-    # So we can add 1 to the array to avoid seeing a warning. 
+    # Magnitude da função é 20.log (abs (f))
+    # Para valores que são 0, podemos acabar com valores indeterminados para log.
+    # Portanto, podemos adicionar 1 ao array para evitar ver um warning.
     magnitude_spectrum = 20 * np.log(cv2.magnitude(dft_shift[:, :, 0], dft_shift[:, :, 1]))
 
-    # Circular HPF mask, center circle is 0, remaining all ones
-    #Can be used for edge detection because low frequencies at center are blocked
-    #and only high frequencies are allowed. Edges are high frequency components.
-    #Amplifies noise.
+    # Máscara circular HPF, o círculo central é 0, permanecendo todos uns
+    # Pode ser usado para detecção de borda porque as frequências baixas no centro são bloqueadas
+    # e apenas altas frequências são permitidas. As bordas são componentes de alta frequência.
+
+    # Amplifica o ruído.
     # FIGURA 6:
     # rows, cols = img.shape
     # crow, ccol = int(rows / 2), int(cols / 2)
@@ -36,9 +36,9 @@ if __name__ == '__main__':
     # mask_area = (x - center[0]) ** 2 + (y - center[1]) ** 2 <= r*r
     # mask[mask_area] = 0
 
-    # Circular LPF mask, center circle is 1, remaining all zeros
-    # Only allows low frequency components - smooth regions
-    # Can smooth out noise but blurs edges.
+    # Máscara LPF circular, o círculo central é 1, permanecendo todos os zeros
+    # Permite apenas componentes de baixa frequência - regiões suaves
+    # Pode suavizar o ruído, mas desfoca as bordas.
     # FIGURA 7:
     rows, cols = img.shape
     crow, ccol = int(rows / 2), int(cols / 2)
@@ -49,7 +49,7 @@ if __name__ == '__main__':
     mask_area = (x - center[0]) ** 2 + (y - center[1]) ** 2 <= r*r
     mask[mask_area] = 1
 
-    # Band Pass Filter - Concentric circle mask, only the points living in concentric circle are ones
+    # Filtro Passa-Banda - Máscara de círculo concêntrico, apenas os pontos que vivem em um círculo concêntrico são uns
     # rows, cols = img.shape
     # crow, ccol = int(rows / 2), int(cols / 2)
     # mask = np.zeros((rows, cols, 2), np.uint8)
@@ -61,14 +61,14 @@ if __name__ == '__main__':
     #                         ((x - center[0]) ** 2 + (y - center[1]) ** 2 <= r_out ** 2))
     # mask[mask_area] = 1
 
-    # apply mask and inverse DFT: Multiply fourier transformed image (values)
-    #with the mask values. 
+    # aplicar máscara e DFT inverso: Multiplique a imagem transformada de Fourier (valores)
+    # com os valores da máscara.
     fshift = dft_shift * mask
 
-    #Get the magnitude spectrum (only for plotting purposes)
+    # Obtenha o espectro de magnitude (apenas para fins de plotagem)
     fshift_mask_mag = 20 * np.log(cv2.magnitude(fshift[:, :, 0], fshift[:, :, 1]))
 
-    #Inverse shift to shift origin back to top left.
+    # Inverter deslocamento para mudar a origem de volta para o canto superior esquerdo.
     f_ishift = np.fft.ifftshift(fshift)
 
     #Inverse DFT to convert back to image domain from the frequency domain. 
