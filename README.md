@@ -1,4 +1,7 @@
-## **Image processing with FFT and IFFT along with filters.** 
+# **Image processing with FFT and IFFT along with filters.**
+
+## Resultado:
+![Resultado filter FFT](result/result.png?raw=true "Title")
 
 ## Instruções para execução:
   1. Utilizando a linguagem Python, insira os seguintes comandos para instalar algumas bibliotecas necessárias: <br/>
