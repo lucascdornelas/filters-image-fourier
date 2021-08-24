@@ -15,6 +15,6 @@
 ## Realizado por:
 
 [**Erick H. D. de Souza**](https://github.com/ErickHDdS) <br/>
-[**Lucas C. Dornelas**](https://github.com/lucascdornelas)
+[**Lucas C. Dornelas**](https://github.com/lucascdornelas) <br/>
 [**Victor Le Roy**](https://github.com/vmleroy)
 
